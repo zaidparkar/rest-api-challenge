@@ -36,6 +36,14 @@ server.get('/issues/:id', (req, res) => {
     }
 });
 
+server.get('/all-issues', (req, res) => {
+    if (issues.length !== 0) {
+        res.json(issues);
+    } else {
+        res.status(404).json({ message: 'Dream application! No Issues are raised yet :)' });
+    }
+});
+
 // Update
 server.put('/issues/:id', (req, res) => {
     const { title, description } = req.body;
