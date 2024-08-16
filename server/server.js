@@ -1,8 +1,13 @@
 import express, { json } from 'express';
 import { v4 as uuidv4 } from 'uuid';
+import cors from 'cors'
 
 const server = express();
+
 server.use(json());
+server.use(cors({
+    origin: 'http://localhost:3000'
+}));
 
 class Issue {
     constructor(title, description) {
