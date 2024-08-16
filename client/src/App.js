@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import NavBar from './NavBar';
 import CreatePage from './pages/CreatePage';
+import EditPage from './pages/EditPage';
 
 function App() {
   return (
@@ -12,8 +13,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/Create" element={<CreatePage />} />
-        {/* // <Route path="/update" component={UpdateIssuePage} />
-        // <Route path="/delete" component={DeleteIssuePage} /> */}
+        <Route path='/Edit' element={<EditPage />} />
       </Routes>
     </Router>
   );

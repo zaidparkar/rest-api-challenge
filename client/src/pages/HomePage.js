@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
 
     const [issues, setIssues] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate()
 
     const getAllIssues = async () => {
         try {
@@ -17,23 +20,29 @@ const HomePage = () => {
         }
     };
 
-    
+    const handleEdit = (issue) => {
+        navigate(`/Edit/?id=${issue.id}&title=${issue.title}&description=${issue.description}`);
+    };
 
-    // const readIssue = () => {
-    //     axios.get('http://localhost:3000/issues/1').then(res => setIssue(res.data));
-    // };
-
-    // const updateIssue = () => {
-    //     const updatedIssue = { id: 1, title: 'Updated Issue', description: 'Updated description' };
-    //     axios.put('http://localhost:3000/issues/1', updatedIssue).then(res => console.log(res.data));
-    // };
-
-    // const deleteIssue = () => {
-    //     axios.delete('http://localhost:3000/issues/1').then(() => console.log('Deleted'));
-    // };
+    async function handleDelete(id) {
+        const isConfirmed = window.confirm("Are you sure you want to delete this issue?");
+        if (!isConfirmed) {
+            return;
+        }
+        const response = await fetch(`http://localhost:8080/issues/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        alert('Issue deleted successfully!');
+        getAllIssues()
+    };
 
     useEffect(() => {
-        console.log('Component mounted');
         getAllIssues();
     }, []);
 
@@ -51,6 +60,7 @@ const HomePage = () => {
                             <th>ID</th>
                             <th>Title</th>
                             <th>Description</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -59,6 +69,10 @@ const HomePage = () => {
                                 <td>{issue.id}</td>
                                 <td>{issue.title}</td>
                                 <td>{issue.description}</td>
+                                <td>
+                                    <i className="bi bi-pencil-square" style={{ cursor: 'pointer', marginRight: '10px' }} onClick={() => handleEdit(issue)}></i>
+                                    <i className="bi bi-trash" style={{ cursor: 'pointer' }} onClick={() => handleDelete(issue.id)}></i>
+                                </td>
                             </tr>
                         ))}
                     </tbody>
